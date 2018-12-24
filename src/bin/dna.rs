@@ -1,6 +1,6 @@
-use std::io;
-use RustyRosalind::{parse_nucleotides, DNA};
 use std::collections::HashMap;
+use std::io;
+use RustyRosalind::{DNAChain, DNA};
 
 fn main() {
   println!("Paste input DNA string:");
@@ -9,7 +9,7 @@ fn main() {
   io::stdin().read_line(&mut input).unwrap();
   input.trim();
 
-  let nucleotides = parse_nucleotides(&input.trim());
+  let nucleotides = DNAChain::parse_nucleotides(&input);
   let mut counts: HashMap<DNA, u32> = HashMap::new();
 
   for nucleotide in nucleotides {
@@ -17,10 +17,11 @@ fn main() {
     *count += 1;
   }
 
-  println!("{} {} {} {}", 
-    counts[&DNA::A], 
-    counts[&DNA::C], 
-    counts[&DNA::G], 
+  println!(
+    "{} {} {} {}",
+    counts[&DNA::A],
+    counts[&DNA::C],
+    counts[&DNA::G],
     counts[&DNA::T]
   );
 }
