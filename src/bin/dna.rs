@@ -1,5 +1,5 @@
 use clap::{App, Arg};
-use rusty_rosalind::nucleotides::DNA;
+use rusty_rosalind::nucleotides::{dna_chain::DNAChain, DNA};
 use std::fs;
 
 struct Counts {
@@ -14,8 +14,8 @@ fn main() {
         .arg(Arg::with_name("input_file").required(true).index(1))
         .get_matches();
     let f_name = matches.value_of("input_file").unwrap();
-    let dna = DNA::parse_str(fs::read_to_string(f_name).unwrap().as_ref());
-    let result = dna.iter().fold(
+    let dna = DNAChain::parse_str(fs::read_to_string(f_name).unwrap().as_ref());
+    let result = dna.into_iter().fold(
         Counts {
             a: 0,
             c: 0,
