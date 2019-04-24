@@ -1,4 +1,5 @@
 /// The 4 base nucleotides that make up a DNA strand
+#[derive(Debug)]
 pub enum DNA {
     A,
     C,
@@ -15,6 +16,17 @@ impl DNA {
             'G' => DNA::G,
             'T' => DNA::T,
             x => panic!("Invalid DNA nucleotide: {:?}", x),
+        }
+    }
+
+    /// computes the compliment of the current DNA nucleotide
+    /// A <=> T, C <=> G
+    pub fn compliment(&self) -> DNA {
+        match &self {
+            DNA::A => DNA::T,
+            DNA::T => DNA::A,
+            DNA::C => DNA::G,
+            DNA::G => DNA::C,
         }
     }
 }
