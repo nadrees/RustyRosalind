@@ -1,0 +1,11 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc bc5e4c3d1233418f683e94d86c3849c32cc6caa1ba7b2b255019111147c79e12 # shrinks to (name, dna_lines, record_str) = ("", DNAChain { nucleotides: [] }, ">\n\n\n\n\n\n\n\n\n\n")
+cc 61c83dd0f40d02f1e8490a733ed83f36b6377ba607f0fd59ca550adb4e864525 # shrinks to (records_str, records) = (">>\n\n\n\n\n\n\n\n\n\n", [Record { name: ">", dna_string: DNAChain { nucleotides: [] } }])
+cc 9b5e0dbfa91fab5ab14e890f5841750584da0aeb6c67fd9214a5fbcabc6d182b # shrinks to (records_str, records) = (">\n\n\n\n\n\n\n\n\n\n\n", [Record { name: "\n", dna_string: DNAChain { nucleotides: [] } }])
+cc 84100f76695b0da15ba4add444b03a203472a25b24df2cb5a750bfe79dd96ed3 # shrinks to (records_str, records) = (">\r\n\n\n\n\n\n\n\n\n\n", [Record { name: "\r", dna_string: DNAChain { nucleotides: [] } }])
+cc c46b0cc9909bda17ab322de5cce7cb4e97bb35fa5f525327b000c61642963485 # shrinks to (name, dna_lines, record_str) = ("\r", DNAChain { nucleotides: [] }, ">\r\n\n\n\n\n\n\n\n\n\n")

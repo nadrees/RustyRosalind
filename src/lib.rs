@@ -1,3 +1,4 @@
+pub mod fasta;
 pub mod nucleotides;
 
 #[macro_export]

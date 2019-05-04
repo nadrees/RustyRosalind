@@ -1,5 +1,5 @@
 /// The 4 base nucleotides that make up a DNA strand
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DNA {
     A,
     C,
@@ -9,6 +9,25 @@ pub enum DNA {
 
 impl DNA {
     /// converts a character to its DNA strand, or panics
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rusty_rosalind::nucleotides::DNA;
+    ///
+    /// assert_eq!(DNA::parse('A'), DNA::A);
+    /// assert_eq!(DNA::parse('C'), DNA::C);
+    /// assert_eq!(DNA::parse('G'), DNA::G);
+    /// assert_eq!(DNA::parse('T'), DNA::T);
+    /// ```
+    ///
+    /// # Panics
+    ///
+    /// ```rust,should_panic
+    /// use rusty_rosalind::nucleotides::DNA;
+    ///
+    /// DNA::parse('X');
+    /// ```
     pub fn parse(c: char) -> DNA {
         match c {
             'A' => DNA::A,
@@ -19,8 +38,19 @@ impl DNA {
         }
     }
 
-    /// computes the compliment of the current DNA nucleotide
+    /// computes the compliment of the current DNA nucleotide:
     /// A <=> T, C <=> G
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rusty_rosalind::nucleotides::DNA;
+    ///
+    /// assert_eq!(DNA::A.compliment(), DNA::T);
+    /// assert_eq!(DNA::T.compliment(), DNA::A);
+    /// assert_eq!(DNA::G.compliment(), DNA::C);
+    /// assert_eq!(DNA::C.compliment(), DNA::G);
+    /// ```
     pub fn compliment(&self) -> DNA {
         match &self {
             DNA::A => DNA::T,
@@ -32,7 +62,7 @@ impl DNA {
 }
 
 /// The 4 base nucleotides that make up an RNA strand
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum RNA {
     A,
     C,
@@ -41,6 +71,18 @@ pub enum RNA {
 }
 
 impl From<&DNA> for RNA {
+    /// Converts a DNA nucleotide to an RNA
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rusty_rosalind::nucleotides::{DNA, RNA};
+    ///
+    /// assert_eq!(RNA::from(&DNA::A), RNA::A);
+    /// assert_eq!(RNA::from(&DNA::C), RNA::C);
+    /// assert_eq!(RNA::from(&DNA::G), RNA::G);
+    /// assert_eq!(RNA::from(&DNA::T), RNA::U);
+    /// ```
     fn from(n: &DNA) -> RNA {
         match n {
             DNA::A => RNA::A,
@@ -53,3 +95,19 @@ impl From<&DNA> for RNA {
 
 pub mod dna_chain;
 pub mod rna_chain;
+
+#[cfg(test)]
+pub mod tests {
+    use super::*;
+    use proptest::arbitrary::Arbitrary;
+    use proptest::prelude::*;
+
+    impl Arbitrary for DNA {
+        type Parameters = ();
+        type Strategy = BoxedStrategy<Self>;
+
+        fn arbitrary_with(_: Self::Parameters) -> Self::Strategy {
+            prop_oneof![Just(DNA::A), Just(DNA::C), Just(DNA::G), Just(DNA::T)].boxed()
+        }
+    }
+}
