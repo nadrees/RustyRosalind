@@ -1,2 +1,2 @@
-pub mod dna;
-pub mod dna_string;
+pub mod nucleotides;
+pub mod strands;
