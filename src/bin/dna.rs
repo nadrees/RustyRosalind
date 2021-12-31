@@ -1,17 +1,11 @@
 use clap::Parser;
-use rusty_rosalind::nucleotides::DNA;
+use rusty_rosalind::args::StrandOnlyArgs as Args;
+use rusty_rosalind::nucleotides::dna::DNA;
 use rusty_rosalind::strands::Strand;
-
-#[derive(Parser, Debug)]
-#[clap(about, version, author)]
-struct Args {
-    #[clap()]
-    dna_string: String,
-}
 
 fn main() {
     let args = Args::parse();
-    let dna_string: Strand<DNA> = args.dna_string.parse().unwrap();
+    let dna_string: Strand<DNA> = args.strand.parse().unwrap();
     let result = dna_string.count_nucleotides();
     println!(
         "{:?} {:?} {:?} {:?}",

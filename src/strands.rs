@@ -1,4 +1,4 @@
-use crate::nucleotides::{Nucleotide, Transcribable};
+use crate::nucleotides::{Complementable, Nucleotide, Transcribable};
 use std::collections::HashMap;
 use std::fmt;
 use std::str::FromStr;
@@ -47,6 +47,16 @@ impl<T: Nucleotide> Strand<T> {
   }
 }
 
+impl<T: Complementable> Strand<T> {
+  pub fn reverse_compliment(&self) -> Strand<T> {
+    let mut rev = self.nucleotides.clone();
+    rev.reverse();
+    Strand {
+      nucleotides: rev.into_iter().map(|n| T::compliment(&n)).collect(),
+    }
+  }
+}
+
 impl<T: Nucleotide> fmt::Debug for Strand<T> {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_list().entries(&self.nucleotides).finish()
@@ -66,7 +76,7 @@ impl<T: Nucleotide> fmt::Display for Strand<T> {
 #[cfg(test)]
 mod tests {
   use super::*;
-  use crate::nucleotides::DNA;
+  use crate::nucleotides::dna::DNA;
 
   #[test]
   fn test_count_nucleotides() {
@@ -91,5 +101,13 @@ mod tests {
     assert_eq!(results.get(&DNA::C), Some(&2));
     assert_eq!(results.get(&DNA::G), Some(&3));
     assert_eq!(results.get(&DNA::T), Some(&4));
+  }
+
+  #[test]
+  fn test_reverse_compliment() -> Result<(), char> {
+    let dna_string: Strand<DNA> = "AAAACCCGGT".parse()?;
+    let expected: Strand<DNA> = "ACCGGGTTTT".parse()?;
+    assert_eq!(dna_string.reverse_compliment(), expected);
+    Ok(())
   }
 }

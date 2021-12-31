@@ -1,4 +1,5 @@
-use rusty_rosalind::nucleotides::{DNA, RNA};
+use rusty_rosalind::nucleotides::dna::DNA;
+use rusty_rosalind::nucleotides::rna::RNA;
 use rusty_rosalind::strands::Strand;
 use std::collections::HashMap;
 
