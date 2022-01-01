@@ -1,9 +1,11 @@
-use crate::nucleotides::dna::DNA;
 use crate::nucleotides::{Complementable, Nucleotide, Transcribable};
 use std::collections::HashMap;
 use std::fmt;
 use std::str::FromStr;
 use std::vec::Vec;
+
+pub mod dna_strand;
+pub mod protein_strand;
 
 #[derive(Eq, PartialEq)]
 pub struct Strand<T: Nucleotide> {
@@ -45,17 +47,6 @@ impl<T: Nucleotide> Strand<T> {
     Strand {
       nucleotides: self.nucleotides.iter().map(|n| Rhs::from(&n)).collect(),
     }
-  }
-}
-
-impl Strand<DNA> {
-  pub fn get_gc_content(&self) -> f32 {
-    let gc_count = self
-      .nucleotides
-      .iter()
-      .filter(|n| **n == DNA::G || **n == DNA::C)
-      .count();
-    gc_count as f32 / self.nucleotides.len() as f32
   }
 }
 
@@ -120,15 +111,6 @@ mod tests {
     let dna_string: Strand<DNA> = "AAAACCCGGT".parse()?;
     let expected: Strand<DNA> = "ACCGGGTTTT".parse()?;
     assert_eq!(dna_string.reverse_compliment(), expected);
-    Ok(())
-  }
-
-  #[test]
-  fn test_gc_content() -> Result<(), char> {
-    let dna_string: Strand<DNA> =
-      "CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGACTGGGAACCTGCGGGCAGTAGGTGGAAT"
-        .parse()?;
-    assert_eq!(dna_string.get_gc_content() * 100.0, 60.919540);
     Ok(())
   }
 }
