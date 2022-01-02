@@ -49,6 +49,20 @@ impl<T: Nucleotide> Strand<T> {
     }
   }
 
+  /// returns the Hamming distance between the 2 strings.
+  /// panics if the strings are not of the same length
+  pub fn distance(&self, other: &Self) -> usize {
+    if self.nucleotides.len() != other.nucleotides.len() {
+      panic!()
+    }
+    self
+      .nucleotides
+      .iter()
+      .zip(other.nucleotides.iter())
+      .filter(|(n1, n2)| **n1 != **n2)
+      .count()
+  }
+
   /// returns all indexes where this is a substring of other
   pub fn substrings(&self, other: &Strand<T>) -> Vec<usize> {
     let mut indexes = vec![];
@@ -166,6 +180,14 @@ mod tests {
     let strand_1: Strand<DNA> = "GATATATGCATATACTT".parse()?;
     let strand_2: Strand<DNA> = "ATAT".parse()?;
     assert_eq!(strand_2.substrings(&strand_1), vec![1, 3, 9]);
+    Ok(())
+  }
+
+  #[test]
+  fn test_distance() -> Result<(), char> {
+    let strand_1: Strand<DNA> = "GAGCCTACTAACGGGAT".parse()?;
+    let strand_2: Strand<DNA> = "CATCGTAATGACGGCCT".parse()?;
+    assert_eq!(strand_1.distance(&strand_2), 7);
     Ok(())
   }
 }
