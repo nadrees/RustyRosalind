@@ -48,6 +48,32 @@ impl<T: Nucleotide> Strand<T> {
       nucleotides: self.nucleotides.iter().map(|n| Rhs::from(&n)).collect(),
     }
   }
+
+  /// returns all indexes where this is a substring of other
+  pub fn substrings(&self, other: &Strand<T>) -> Vec<usize> {
+    let mut indexes = vec![];
+    if other.nucleotides.len() < self.nucleotides.len() {
+      return vec![];
+    }
+    for i in 0..(other.nucleotides.len() - self.nucleotides.len()) {
+      if self.is_substr_starting_from(other, i) {
+        indexes.push(i);
+      }
+    }
+    indexes
+  }
+
+  pub fn is_substr_starting_from(&self, other: &Strand<T>, start_index: usize) -> bool {
+    if other.nucleotides.len() <= self.nucleotides.len() + start_index {
+      return false;
+    }
+    for i in 0..self.nucleotides.len() {
+      if self.nucleotides[i] != other.nucleotides[i + start_index] {
+        return false;
+      }
+    }
+    true
+  }
 }
 
 impl<T: Complementable> Strand<T> {
@@ -111,6 +137,35 @@ mod tests {
     let dna_string: Strand<DNA> = "AAAACCCGGT".parse()?;
     let expected: Strand<DNA> = "ACCGGGTTTT".parse()?;
     assert_eq!(dna_string.reverse_compliment(), expected);
+    Ok(())
+  }
+
+  macro_rules! is_substr_starting_at_test {
+    ($($name:ident: $value:expr,)*) => {
+      $(
+        #[test]
+        fn $name() -> Result<(), char> {
+          let (str_1, str_2, start_index, expected) = $value;
+          let strand_1: Strand<DNA> = str_1.parse()?;
+          let strand_2: Strand<DNA> = str_2.parse()?;
+          assert_eq!(strand_1.is_substr_starting_from(&strand_2, start_index), expected);
+          Ok(())
+        }
+      )*
+    };
+  }
+
+  is_substr_starting_at_test! {
+    is_substr_starting_at_str_1_longer: ("GATATATGCATATACTT", "ATAT", 0, false),
+    is_substr_starting_at_wrong_index: ("ATAT", "GATATATGCATATACTT", 0, false),
+    is_substr_starting_at_right_index: ("ATAT", "GATATATGCATATACTT", 1, true),
+  }
+
+  #[test]
+  fn test_substrs() -> Result<(), char> {
+    let strand_1: Strand<DNA> = "GATATATGCATATACTT".parse()?;
+    let strand_2: Strand<DNA> = "ATAT".parse()?;
+    assert_eq!(strand_2.substrings(&strand_1), vec![1, 3, 9]);
     Ok(())
   }
 }
