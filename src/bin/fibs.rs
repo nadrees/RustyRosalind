@@ -7,11 +7,11 @@ struct Args {
   #[clap()]
   n: usize,
   #[clap()]
-  k: u8,
+  m: u8,
 }
 
 fn main() {
   let args = Args::parse();
-  let mut rabbits = Rabbits::new_with_offsping(args.k);
+  let mut rabbits = Rabbits::new_with_max_age(args.m);
   println!("{}", rabbits.nth(args.n - 1).unwrap());
 }

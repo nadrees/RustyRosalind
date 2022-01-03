@@ -6,14 +6,14 @@
   "configurations": [
     {
       "name": "(Windows) Launch",
-      "type": "cppvsdbg",
+      "type": "lldb",
       "request": "launch",
       "program": "${workspaceFolder}/target/debug/deps/rusty_rosalind-f395182a55c41faa.exe",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
       "environment": [],
-      "console": "externalTerminal"
+      "console": "internalConsole"
     }
   ]
 }
