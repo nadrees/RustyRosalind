@@ -1,6 +1,13 @@
 use crate::nucleotides::protein::AminoAcid;
 use crate::nucleotides::rna::RNA;
+use crate::strands::rna_strand::RNAReverseTranslations;
 use crate::strands::Strand;
+
+impl Strand<AminoAcid> {
+  pub fn reverse_translations(&self) -> RNAReverseTranslations {
+    RNAReverseTranslations::new(self)
+  }
+}
 
 impl From<Strand<RNA>> for Strand<AminoAcid> {
   fn from(rna_strand: Strand<RNA>) -> Self {

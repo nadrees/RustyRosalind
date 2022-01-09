@@ -6,10 +6,19 @@ use std::vec::Vec;
 
 pub mod dna_strand;
 pub mod protein_strand;
+pub mod rna_strand;
 
 #[derive(Eq, PartialEq)]
 pub struct Strand<T: Nucleotide> {
   nucleotides: Vec<T>,
+}
+
+impl<T: Nucleotide> IntoIterator for Strand<T> {
+  type Item = T;
+  type IntoIter = std::vec::IntoIter<Self::Item>;
+  fn into_iter(self) -> <Self as std::iter::IntoIterator>::IntoIter {
+    self.nucleotides.into_iter()
+  }
 }
 
 impl<T: Nucleotide> FromStr for Strand<T> {
@@ -27,6 +36,24 @@ impl<T: Nucleotide> FromStr for Strand<T> {
 }
 
 impl<T: Nucleotide> Strand<T> {
+  pub fn new(nucleotides: Vec<T>) -> Self {
+    Strand {
+      nucleotides: nucleotides,
+    }
+  }
+
+  /// returns a new strand containing the two strands concatenated together
+  pub fn concat(&self, other: &Strand<T>) -> Self {
+    let mut nucleotides = self.nucleotides.clone();
+    let other_copy = other.nucleotides.clone();
+    nucleotides.extend(other_copy);
+    Self::new(nucleotides)
+  }
+
+  pub fn push(&mut self, nucleotide: T) {
+    self.nucleotides.push(nucleotide);
+  }
+
   pub fn count_nucleotides(&self) -> HashMap<&T, u32> {
     let mut map: HashMap<&T, u32> = HashMap::new();
     for nucleotide in &self.nucleotides {
@@ -44,9 +71,7 @@ impl<T: Nucleotide> Strand<T> {
     Rhs: Transcribable<'a, T>,
     T: 'a,
   {
-    Strand {
-      nucleotides: self.nucleotides.iter().map(|n| Rhs::from(&n)).collect(),
-    }
+    Strand::new(self.nucleotides.iter().map(|n| Rhs::from(&n)).collect())
   }
 
   /// returns the Hamming distance between the 2 strings.
@@ -94,9 +119,7 @@ impl<T: Complementable> Strand<T> {
   pub fn reverse_compliment(&self) -> Strand<T> {
     let mut rev = self.nucleotides.clone();
     rev.reverse();
-    Strand {
-      nucleotides: rev.into_iter().map(|n| T::compliment(&n)).collect(),
-    }
+    Strand::new(rev.into_iter().map(|n| T::compliment(&n)).collect())
   }
 }
 
