@@ -113,6 +113,21 @@ impl<T: Nucleotide> Strand<T> {
     }
     true
   }
+
+  /// returns true is the suffix of the current strand overlaps with the prefix of other
+  ///
+  /// @length: the length of the overlap to test for
+  pub fn overlaps_with_length(&self, other: &Strand<T>, length: usize) -> bool {
+    if length == 0 || self.nucleotides.len() < length || other.nucleotides.len() < length {
+      return false;
+    }
+    for i in 0..length {
+      if self.nucleotides[self.nucleotides.len() - length + i] != other.nucleotides[i] {
+        return false;
+      }
+    }
+    true
+  }
 }
 
 impl<T: Complementable> Strand<T> {
@@ -212,5 +227,31 @@ mod tests {
     let strand_2: Strand<DNA> = "CATCGTAATGACGGCCT".parse()?;
     assert_eq!(strand_1.distance(&strand_2), 7);
     Ok(())
+  }
+
+  mod overlaps_with_length_tests {
+    use super::*;
+
+    macro_rules! overlaps_with_length_test {
+      ($($name:ident: $value:expr,)*) => {
+        $(
+          #[test]
+          fn $name() -> Result<(), char> {
+            let (str_1, str_2, overlap_length, expected) = $value;
+            let strand_1: Strand<DNA> = str_1.parse()?;
+            let strand_2: Strand<DNA> = str_2.parse()?;
+            assert_eq!(strand_1.overlaps_with_length(&strand_2, overlap_length), expected);
+            Ok(())
+          }
+        )*
+      };
+    }
+
+    overlaps_with_length_test! {
+      overlaps: ("AAATAAA", "AAATTTT", 3, true),
+      no_overlap: ("AAATAAA", "AAATTTT", 4, false),
+      length_zero: ("AAATAAA", "AAATTTT", 0, false),
+      length_too_long: ("AAATAAA", "AAATTTT", 10, false),
+    }
   }
 }
