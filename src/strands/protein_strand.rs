@@ -7,6 +7,14 @@ impl Strand<AminoAcid> {
   pub fn reverse_translations(&self) -> RNAReverseTranslations {
     RNAReverseTranslations::new(self)
   }
+
+  pub fn weight(&self) -> f64 {
+    self
+      .nucleotides
+      .iter()
+      .map(|aa| AminoAcid::get_monoisotopic_mass(aa))
+      .sum()
+  }
 }
 
 impl From<Strand<RNA>> for Strand<AminoAcid> {

@@ -58,6 +58,34 @@ impl TryFrom<char> for AminoAcid {
   }
 }
 
+impl AminoAcid {
+  pub fn get_monoisotopic_mass(amino_acid: &AminoAcid) -> f64 {
+    match amino_acid {
+      AminoAcid::A => 71.03711,
+      AminoAcid::C => 103.00919,
+      AminoAcid::D => 115.02694,
+      AminoAcid::E => 129.04259,
+      AminoAcid::F => 147.06841,
+      AminoAcid::G => 57.02146,
+      AminoAcid::H => 137.05891,
+      AminoAcid::I => 113.08406,
+      AminoAcid::K => 128.09496,
+      AminoAcid::L => 113.08406,
+      AminoAcid::M => 131.04049,
+      AminoAcid::N => 114.04293,
+      AminoAcid::P => 97.05276,
+      AminoAcid::Q => 128.05858,
+      AminoAcid::R => 156.10111,
+      AminoAcid::S => 87.03203,
+      AminoAcid::T => 101.04768,
+      AminoAcid::V => 99.06841,
+      AminoAcid::W => 186.07931,
+      AminoAcid::Y => 163.06333,
+      AminoAcid::Stop => 0.0,
+    }
+  }
+}
+
 impl From<(RNA, RNA, RNA)> for AminoAcid {
   fn from(codon: (RNA, RNA, RNA)) -> Self {
     match codon {
