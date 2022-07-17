@@ -1,7 +1,7 @@
 use super::Nucleotide;
 use crate::nucleotides::rna::RNA;
 
-#[derive(Copy, Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum AminoAcid {
     A,
     C,

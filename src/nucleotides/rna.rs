@@ -2,7 +2,7 @@ use super::dna::DNA;
 use super::protein::AminoAcid;
 use super::{Nucleotide, Transcribable};
 
-#[derive(Copy, Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum RNA {
     A,
     C,

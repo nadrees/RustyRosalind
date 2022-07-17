@@ -1,6 +1,6 @@
 use super::{Complementable, Nucleotide};
 
-#[derive(Copy, Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum DNA {
     A,
     C,

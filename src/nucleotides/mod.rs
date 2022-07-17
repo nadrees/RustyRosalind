@@ -8,7 +8,7 @@ pub mod rna;
 
 /// A base Nucleotide. For convenience, Protein encodings are also considered
 /// a nucleotide.
-pub trait Nucleotide: TryFrom<char> + Sized + Eq + Hash + Clone + Debug {}
+pub trait Nucleotide: TryFrom<char> + Sized + Eq + Hash + Clone + Debug + Copy + Ord {}
 
 /// Indicates this nucleotide can be transcribed from another
 pub trait Transcribable<'a, T>: Nucleotide + From<&'a T>

@@ -65,6 +65,13 @@ where
     }
 }
 
+impl<T: Nucleotide> Fasta<T> {
+    /// Returns the number of nucleotides in the strand, also referred to as its 'length'.
+    pub fn len(&self) -> usize {
+        self.strand.len()
+    }
+}
+
 fn parse_name(line: &str) -> &str {
     if !line.starts_with(">") {
         panic!();

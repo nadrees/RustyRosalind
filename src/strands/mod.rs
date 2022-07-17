@@ -1,6 +1,7 @@
 use crate::nucleotides::{Complementable, Nucleotide, Transcribable};
 use std::collections::HashMap;
 use std::fmt;
+use std::ops::Index;
 use std::str::FromStr;
 use std::vec::Vec;
 
@@ -127,6 +128,11 @@ impl<T: Nucleotide> Strand<T> {
         }
         true
     }
+
+    /// Returns the number of nucleotides in the strand, also referred to as its 'length'.
+    pub fn len(&self) -> usize {
+        self.nucleotides.len()
+    }
 }
 
 impl<T: Complementable> Strand<T> {
@@ -149,6 +155,13 @@ impl<T: Nucleotide> fmt::Display for Strand<T> {
             .iter()
             .map(|n| write!(f, "{:?}", n))
             .collect()
+    }
+}
+
+impl<T: Nucleotide> Index<usize> for Strand<T> {
+    type Output = T;
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.nucleotides[index]
     }
 }
 
